@@ -188,18 +188,23 @@ package
 		
 		private var _sheeld:Sprite = new Sprite();
 		private var _sheeldLabel:Label;
+		private var _saveBtn:PushButton;
 		private function setSheeld():void 
 		{
 			_sheeld.graphics.clear();
-			_sheeld.graphics.beginFill(0xFFFFFF, 0.5);
+			_sheeld.graphics.beginFill(0xFFFFFF, 0.7);
 			_sheeld.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
 			_sheeld.graphics.endFill();
 			addChild(_sheeld);
 			if(!_sheeldLabel){
 				_sheeldLabel = new Label(_sheeld, 0, 0, "Progress: 0 / " + _counter.value);
+				_saveBtn = new PushButton(_sheeld, 0, 0, "Save", onSave);
 			}
-			_sheeldLabel.x = int(stage.stageWidth * 0.5) - 50;
-			_sheeldLabel.y = int(stage.stageHeight * 0.5);
+			_sheeldLabel.x = int((stage.stageWidth - _sheeldLabel.width) * 0.5);
+			_sheeldLabel.y = int((stage.stageHeight - _sheeldLabel.height) * 0.5);
+			_saveBtn.x = int((stage.stageWidth - _saveBtn.width) * 0.5);
+			_saveBtn.y = _sheeldLabel.y + 25;
+			_saveBtn.enabled = false;
 		}
 		
 		private function onProgress(e:Event):void 
@@ -214,14 +219,14 @@ package
 			ImageManager.getInstance().removeEventListener("progress", onProgress);
 			ImageManager.getInstance().removeEventListener(Event.COMPLETE, complete);
 			
-			//trace("complete");
-			atClick();
+			_saveBtn.enabled = true;
+			//atClick();
 			
-			removeChild(_sheeld);
+			//removeChild(_sheeld);
 		}
 		
-        private function atClick():void {
-            
+		private function onSave(e:Event):void 
+		{
             //zip化
             var zipOut:ZipOutput = new ZipOutput();
             
@@ -246,6 +251,7 @@ package
             //function onComplete(e:Event):void {
                 //trace(fr.name);
             //}
+			removeChild(_sheeld);
             
         }
 	}
